@@ -104,8 +104,8 @@ jobs:
         if: matrix.os == 'windows-latest'
         shell: powershell
         run: |
-          # 用系统自带的 Windows PowerShell 5.1，不是 pwsh 7
-          # 只有它能暴露「无 BOM 的 UTF-8 被按 ANSI 解码」这个问题
+          # Use the system Windows PowerShell 5.1, not pwsh 7
+          # Only it can expose the "no-BOM UTF-8 decoded as ANSI" problem
           $fail = 0
           Get-ChildItem -Recurse -Filter *.ps1 |
             Where-Object { $_.FullName -notmatch 'node_modules' } |
@@ -114,9 +114,9 @@ jobs:
               [System.Management.Automation.Language.Parser]::ParseFile(
                 $_.FullName, [ref]$t, [ref]$e) | Out-Null
               if ($e.Count -gt 0) {
-                Write-Host "  FAIL $($_.Name) : $($e.Count) 个错误"
+                Write-Host "  FAIL $($_.Name) : $($e.Count) errors"
                 $e | Select-Object -First 3 | ForEach-Object {
-                  Write-Host "       行$($_.Extent.StartLineNumber): $($_.Message)"
+                  Write-Host "       line $($_.Extent.StartLineNumber): $($_.Message)"
                 }
                 $script:fail = 1
               } else {
@@ -124,10 +124,10 @@ jobs:
               }
             }
           if ($fail -ne 0) {
-            Write-Host "::error::PowerShell 5.1 解析失败，用户环境（Windows 自带 PS）会崩溃"
+            Write-Host "::error::PowerShell 5.1 parse failed; user environment will break"
             exit 1
           }
-          Write-Host "全部通过 Windows PowerShell 5.1 解析"
+          Write-Host "All scripts parse OK under Windows PowerShell 5.1"
 
       - name: 静态检查（危险操作 / 变量边界 / 版本一致性）
         run: node scripts/check-scripts.mjs
@@ -155,9 +155,9 @@ jobs:
           Write-Host "PSVersion: $($PSVersionTable.PSVersion)"
           Write-Host "PSEdition: $($PSVersionTable.PSEdition)"
           if ($PSVersionTable.PSVersion.Major -ne 5) {
-            throw "本 job 必须在 PowerShell 5.1 下跑，实际是 $($PSVersionTable.PSVersion.Major)"
+            throw "This job must run under PowerShell 5.1, actual: $($PSVersionTable.PSVersion.Major)"
           }
-          Write-Host "OK  确认是 Windows PowerShell 5.1"
+          Write-Host "OK  confirmed Windows PowerShell 5.1"
 
       - name: 装宿主（用 pwsh 装，只是准备环境）
         shell: pwsh
@@ -173,39 +173,39 @@ jobs:
         shell: powershell
         timeout-minutes: 5
         run: |
-          Write-Host "=== 用 Windows PowerShell 5.1 执行 diagnose.ps1 ==="
-          Write-Host "这一步会暴露无 BOM 导致的解析失败"
+          Write-Host "=== Running diagnose.ps1 under Windows PowerShell 5.1 ==="
+          Write-Host "This step exposes no-BOM parse failures"
           $ErrorActionPreference = "Stop"
           & "$env:GITHUB_WORKSPACE\diagnose.ps1"
           if ($LASTEXITCODE -ne 0 -and $null -ne $LASTEXITCODE) {
-            throw "diagnose.ps1 退出码 $LASTEXITCODE"
+            throw "diagnose.ps1 exit code $LASTEXITCODE"
           }
           Write-Host ""
-          Write-Host "OK  diagnose.ps1 在 PS 5.1 下执行成功"
+          Write-Host "OK  diagnose.ps1 ran successfully under PS 5.1"
 
       - name: 【关键】用 PS 5.1 跑 install.ps1（用户的第二步）
         shell: powershell
         timeout-minutes: 15
         run: |
-          Write-Host "=== 清空 DSH_HOME 模拟全新用户 ==="
+          Write-Host "=== Clearing DSH_HOME to simulate a fresh user ==="
           $DSH = Join-Path $env:USERPROFILE ".dsh"
           if (Test-Path $DSH) { Remove-Item -Recurse -Force $DSH -ErrorAction SilentlyContinue }
 
-          Write-Host "=== 用 Windows PowerShell 5.1 执行 install.ps1 ==="
+          Write-Host "=== Running install.ps1 under Windows PowerShell 5.1 ==="
           $ErrorActionPreference = "Stop"
           & "$env:GITHUB_WORKSPACE\install.ps1"
           if ($LASTEXITCODE -ne 0 -and $null -ne $LASTEXITCODE) {
-            throw "install.ps1 退出码 $LASTEXITCODE"
+            throw "install.ps1 exit code $LASTEXITCODE"
           }
           Write-Host ""
-          Write-Host "OK  install.ps1 在 PS 5.1 下执行成功"
+          Write-Host "OK  install.ps1 ran successfully under PS 5.1"
 
       - name: 断言插件入口（装完能不能看到）
         shell: powershell
         run: |
-          # 断言逻辑放在独立 .ps1 文件里（带 BOM，纯英文）
-          # 不内联在 YAML 里：GitHub Actions 写临时文件时不保证编码，
-          # 中文会被按 ANSI 解码导致语法错误
+          # Assertion logic lives in a standalone .ps1 (with BOM, ASCII only)
+          # Not inlined in YAML: GitHub Actions does not guarantee temp file encoding,
+          # non-ASCII gets decoded as ANSI and breaks parsing
           & "$env:GITHUB_WORKSPACE\scripts\verify-install.ps1"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
