@@ -12,7 +12,7 @@
 ### Windows
 
 ```powershell
-$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/14f4319a71c0fb987673cec79c984329c337b221/diagnose.ps1"
+$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/a4779dfddf7bc974aefca98e35664118bddc468a/diagnose.ps1"
 $f = "$env:TEMP\dsh-diagnose.ps1"
 Invoke-WebRequest -Uri $u -OutFile $f -UseBasicParsing
 if ((Get-Item $f).Length -lt 500) { throw "下载不完整，请重试" }
@@ -22,7 +22,7 @@ if ((Get-Item $f).Length -lt 500) { throw "下载不完整，请重试" }
 ### macOS
 
 ```bash
-u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/14f4319a71c0fb987673cec79c984329c337b221/diagnose.sh"
+u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/a4779dfddf7bc974aefca98e35664118bddc468a/diagnose.sh"
 f="$(mktemp /tmp/dsh-diagnose-XXXXXX.sh)"
 trap 'rm -f "$f"' EXIT
 curl -fsSL --retry 3 -o "$f" "$u" || { echo "下载失败"; exit 1; }
@@ -144,7 +144,7 @@ npm -v
 
 ```powershell
 # Windows
-$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/14f4319a71c0fb987673cec79c984329c337b221/install.ps1"
+$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/a4779dfddf7bc974aefca98e35664118bddc468a/install.ps1"
 $f = "$env:TEMP\dsh-install.ps1"
 Invoke-WebRequest -Uri $u -OutFile $f -UseBasicParsing
 if ((Get-Item $f).Length -lt 5000) { throw "文件长度异常，请重试" }
@@ -153,7 +153,7 @@ if ((Get-Item $f).Length -lt 5000) { throw "文件长度异常，请重试" }
 
 ```bash
 # macOS
-u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/14f4319a71c0fb987673cec79c984329c337b221/install.sh"
+u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/a4779dfddf7bc974aefca98e35664118bddc468a/install.sh"
 f="$(mktemp /tmp/dsh-install-XXXXXX.sh)"
 trap 'rm -f "$f"' EXIT
 curl -fsSL --retry 3 -o "$f" "$u" || { echo "下载失败"; exit 1; }
@@ -204,7 +204,7 @@ node -p "require(require('os').homedir()+'/.dsh/profiles/web/node_modules/dsh-pu
 
 ```powershell
 # Windows
-$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/14f4319a71c0fb987673cec79c984329c337b221/install.ps1"
+$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/a4779dfddf7bc974aefca98e35664118bddc468a/install.ps1"
 $f = "$env:TEMP\dsh-install.ps1"
 Invoke-WebRequest -Uri $u -OutFile $f -UseBasicParsing
 if ((Get-Item $f).Length -lt 5000) { throw "文件长度异常，请重试" }
@@ -213,7 +213,7 @@ if ((Get-Item $f).Length -lt 5000) { throw "文件长度异常，请重试" }
 
 ```bash
 # macOS
-u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/14f4319a71c0fb987673cec79c984329c337b221/install.sh"
+u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/a4779dfddf7bc974aefca98e35664118bddc468a/install.sh"
 f="$(mktemp /tmp/dsh-install-XXXXXX.sh)"
 trap 'rm -f "$f"' EXIT
 curl -fsSL --retry 3 -o "$f" "$u" || { echo "下载失败"; exit 1; }
@@ -235,7 +235,7 @@ bash "$f"
 ```powershell
 # Windows
 Remove-Item -Recurse -Force "$env:USERPROFILE\.dsh\profiles\web\node_modules\dsh-purge"
-$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/14f4319a71c0fb987673cec79c984329c337b221/install.ps1"
+$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/a4779dfddf7bc974aefca98e35664118bddc468a/install.ps1"
 $f = "$env:TEMP\dsh-install.ps1"
 Invoke-WebRequest -Uri $u -OutFile $f -UseBasicParsing
 if ((Get-Item $f).Length -lt 5000) { throw "文件长度异常，请重试" }
@@ -245,7 +245,7 @@ if ((Get-Item $f).Length -lt 5000) { throw "文件长度异常，请重试" }
 ```bash
 # macOS
 rm -rf ~/.dsh/profiles/web/node_modules/dsh-purge
-u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/14f4319a71c0fb987673cec79c984329c337b221/install.sh"
+u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/a4779dfddf7bc974aefca98e35664118bddc468a/install.sh"
 f="$(mktemp /tmp/dsh-install-XXXXXX.sh)"
 trap 'rm -f "$f"' EXIT
 curl -fsSL --retry 3 -o "$f" "$u" || { echo "下载失败"; exit 1; }
@@ -420,7 +420,7 @@ pty.node   或   conpty.node
 
 ```powershell
 # Windows
-$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/14f4319a71c0fb987673cec79c984329c337b221/install.ps1"
+$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/a4779dfddf7bc974aefca98e35664118bddc468a/install.ps1"
 $f = "$env:TEMP\dsh-install.ps1"
 Invoke-WebRequest -Uri $u -OutFile $f -UseBasicParsing
 if ((Get-Item $f).Length -lt 5000) { throw "文件长度异常，请重试" }
@@ -429,7 +429,7 @@ if ((Get-Item $f).Length -lt 5000) { throw "文件长度异常，请重试" }
 
 ```bash
 # macOS
-u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/14f4319a71c0fb987673cec79c984329c337b221/install.sh"
+u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/a4779dfddf7bc974aefca98e35664118bddc468a/install.sh"
 f="$(mktemp /tmp/dsh-install-XXXXXX.sh)"
 trap 'rm -f "$f"' EXIT
 curl -fsSL --retry 3 -o "$f" "$u" || { echo "下载失败"; exit 1; }
@@ -456,7 +456,7 @@ bash "$f"
 
 ```powershell
 # Windows
-$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/14f4319a71c0fb987673cec79c984329c337b221/install.ps1"
+$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/a4779dfddf7bc974aefca98e35664118bddc468a/install.ps1"
 $f = "$env:TEMP\dsh-install.ps1"
 Invoke-WebRequest -Uri $u -OutFile $f -UseBasicParsing
 if ((Get-Item $f).Length -lt 5000) { throw "文件长度异常，请重试" }
@@ -465,7 +465,7 @@ if ((Get-Item $f).Length -lt 5000) { throw "文件长度异常，请重试" }
 
 ```bash
 # macOS
-u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/14f4319a71c0fb987673cec79c984329c337b221/install.sh"
+u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/a4779dfddf7bc974aefca98e35664118bddc468a/install.sh"
 f="$(mktemp /tmp/dsh-install-XXXXXX.sh)"
 trap 'rm -f "$f"' EXIT
 curl -fsSL --retry 3 -o "$f" "$u" || { echo "下载失败"; exit 1; }
@@ -899,7 +899,7 @@ echo "宿主已清"
 
 ```powershell
 # Windows
-$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/14f4319a71c0fb987673cec79c984329c337b221/diagnose.ps1"
+$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/a4779dfddf7bc974aefca98e35664118bddc468a/diagnose.ps1"
 $f = "$env:TEMP\dsh-diagnose.ps1"
 Invoke-WebRequest -Uri $u -OutFile $f -UseBasicParsing
 if ((Get-Item $f).Length -lt 500) { throw "下载不完整，请重试" }
@@ -908,7 +908,7 @@ if ((Get-Item $f).Length -lt 500) { throw "下载不完整，请重试" }
 
 ```bash
 # macOS
-u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/14f4319a71c0fb987673cec79c984329c337b221/diagnose.sh"
+u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/a4779dfddf7bc974aefca98e35664118bddc468a/diagnose.sh"
 f="$(mktemp /tmp/dsh-diagnose-XXXXXX.sh)"
 trap 'rm -f "$f"' EXIT
 curl -fsSL --retry 3 -o "$f" "$u" || { echo "下载失败"; exit 1; }
@@ -1120,7 +1120,7 @@ irm : 基础连接已经关闭
 
 **Windows**
 ```powershell
-$u = "https://ghfast.top/https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/14f4319a71c0fb987673cec79c984329c337b221/install.ps1"
+$u = "https://ghfast.top/https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/a4779dfddf7bc974aefca98e35664118bddc468a/install.ps1"
 $f = "$env:TEMP\dsh-install.ps1"
 Invoke-WebRequest -Uri $u -OutFile $f -UseBasicParsing
 if ((Get-Item $f).Length -lt 5000) { throw "文件长度异常，请重试" }
@@ -1129,7 +1129,7 @@ if ((Get-Item $f).Length -lt 5000) { throw "文件长度异常，请重试" }
 
 **macOS**
 ```bash
-u="https://ghfast.top/https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/14f4319a71c0fb987673cec79c984329c337b221/install.sh"
+u="https://ghfast.top/https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/a4779dfddf7bc974aefca98e35664118bddc468a/install.sh"
 f="$(mktemp /tmp/dsh-install-XXXXXX.sh)"
 trap 'rm -f "$f"' EXIT
 curl -fsSL --retry 3 -o "$f" "$u" || { echo "下载失败"; exit 1; }
@@ -1189,7 +1189,7 @@ console.log("✅ 应用已写入宿主");
 
 ```powershell
 # Windows
-$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/14f4319a71c0fb987673cec79c984329c337b221/diagnose.ps1"
+$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/a4779dfddf7bc974aefca98e35664118bddc468a/diagnose.ps1"
 $f = "$env:TEMP\dsh-diagnose.ps1"
 Invoke-WebRequest -Uri $u -OutFile $f -UseBasicParsing
 if ((Get-Item $f).Length -lt 500) { throw "下载不完整，请重试" }
@@ -1198,7 +1198,7 @@ if ((Get-Item $f).Length -lt 500) { throw "下载不完整，请重试" }
 
 ```bash
 # macOS
-u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/14f4319a71c0fb987673cec79c984329c337b221/diagnose.sh"
+u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/a4779dfddf7bc974aefca98e35664118bddc468a/diagnose.sh"
 f="$(mktemp /tmp/dsh-diagnose-XXXXXX.sh)"
 trap 'rm -f "$f"' EXIT
 curl -fsSL --retry 3 -o "$f" "$u" || { echo "下载失败"; exit 1; }
