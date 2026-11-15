@@ -203,47 +203,12 @@ jobs:
       - name: 断言插件入口（装完能不能看到）
         shell: powershell
         run: |
-          $DSH = Join-Path $env:USERPROFILE ".dsh"
-          $profile = Join-Path $DSH "profiles\web"
-          $fail = 0
+          # 断言逻辑放在独立 .ps1 文件里（带 BOM，纯英文）
+          # 不内联在 YAML 里：GitHub Actions 写临时文件时不保证编码，
+          # 中文会被按 ANSI 解码导致语法错误
+          & "$env:GITHUB_WORKSPACE\scripts\verify-install.ps1"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-          Write-Host "=== 1. 包是否就位 ==="
-          $pkg = Join-Path $profile "node_modules\dsh-purge\package.json"
-          if (Test-Path $pkg) {
-            $v = (Get-Content $pkg -Raw | ConvertFrom-Json).version
-            Write-Host "  OK   版本: $v"
-            if ($v -ne "1.1.71-rc2.1") { Write-Host "  FAIL 版本不符"; $fail = 1 }
-          } else {
-            Write-Host "  FAIL 包未就位: $pkg"; $fail = 1
-          }
-
-          Write-Host "=== 2. bundles 是否登记 ==="
-          $pj = Join-Path $profile "package.json"
-          if (Test-Path $pj) {
-            $d = Get-Content $pj -Raw | ConvertFrom-Json
-            $b = $d.dsh.profile.bundles
-            Write-Host "  bundles: $($b -join ',')"
-            if ($b -contains "dsh-purge") { Write-Host "  OK   dsh-purge 已登记" }
-            else { Write-Host "  FAIL dsh-purge 未登记"; $fail = 1 }
-            if ($b -contains "@deepseek-ai/dsh-base") { Write-Host "  OK   base 存在" }
-            else { Write-Host "  FAIL base 缺失"; $fail = 1 }
-          } else { Write-Host "  FAIL profile package.json 不存在"; $fail = 1 }
-
-          Write-Host "=== 3. cordis.patch.yml 是否登记 ==="
-          $py = Join-Path $profile "cordis.patch.yml"
-          if (Test-Path $py) {
-            $hit = (Select-String -Path $py -Pattern "dsh-purge" -SimpleMatch -ErrorAction SilentlyContinue).Count
-            Write-Host "  提及次数: $hit"
-            if ($hit -ge 1) { Write-Host "  OK   patch 已登记" }
-            else { Write-Host "  FAIL patch 未登记"; $fail = 1 }
-          } else { Write-Host "  FAIL cordis.patch.yml 不存在"; $fail = 1 }
-
-          if ($fail -ne 0) {
-            Write-Host "::error::插件入口检查失败，用户装完看不到 purge"
-            exit 1
-          }
-          Write-Host ""
-          Write-Host "=== 全部通过：PS 5.1 下装完能看到插件入口 ==="
 
   # ══════════════════════════════════════════════════════════════
   # 清理逻辑测试：两个平台跑同一套
