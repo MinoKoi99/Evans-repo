@@ -70,7 +70,9 @@ bash --noprofile --norc -e -o pipefail {0}
 - [ ] 文档引用的脚本 URL 是否固定在**包含最终版本**的 commit SHA？
   ```bash
   # 验证：文档引用的 SHA 是否包含 scripts/ 的最后一次修改
-  git merge-base --is-ancestor $(git log -1 --format=%H -- scripts/) <文档引用的SHA>
+  # DOC_SHA 换成你文档里写的那个 40 位 SHA
+  DOC_SHA=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  git merge-base --is-ancestor "$(git log -1 --format=%H -- scripts/)" "$DOC_SHA"
   ```
 - [ ] 改完文档后，`scripts/` 没有新改动 → 文档 SHA 不用变
 - [ ] 如果 `scripts/` 有新改动 → 文档 SHA 必须同步更新，否则用户下载的脚本 ≠ CI 验证的脚本
