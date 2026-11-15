@@ -133,6 +133,119 @@ jobs:
         run: node scripts/check-scripts.mjs
 
   # ══════════════════════════════════════════════════════════════
+  # Windows PowerShell 5.1 兼容：模拟真实用户环境
+  # 用户机器上的是 powershell.exe (5.1)，不是 CI 的 pwsh 7
+  # 只有它能暴露「无 BOM 的 UTF-8 被按 ANSI 解码」问题
+  # ══════════════════════════════════════════════════════════════
+  ps51-compat:
+    name: Windows PowerShell 5.1 实跑
+    runs-on: windows-latest
+    timeout-minutes: 50
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: 确认是 PowerShell 5.1（不是 7）
+        shell: powershell
+        run: |
+          Write-Host "PSVersion: $($PSVersionTable.PSVersion)"
+          Write-Host "PSEdition: $($PSVersionTable.PSEdition)"
+          if ($PSVersionTable.PSVersion.Major -ne 5) {
+            throw "本 job 必须在 PowerShell 5.1 下跑，实际是 $($PSVersionTable.PSVersion.Major)"
+          }
+          Write-Host "OK  确认是 Windows PowerShell 5.1"
+
+      - name: 装宿主（用 pwsh 装，只是准备环境）
+        shell: pwsh
+        timeout-minutes: 30
+        run: |
+          npm i -g @deepseek-ai/dsh@0.2.1-rc.2 --ignore-scripts
+          if ($LASTEXITCODE -ne 0) { throw "宿主安装失败" }
+          npm i -g @deepseek-ai/dsh@0.2.1-rc.2 `
+            --allow-scripts=@deepseek-ai/dsh-subprocess-local,koffi,node-pty,@google/genai,protobufjs
+          if ($LASTEXITCODE -ne 0) { throw "原生模块构建失败" }
+
+      - name: 【关键】用 PS 5.1 跑 diagnose.ps1（用户的第一步）
+        shell: powershell
+        timeout-minutes: 5
+        run: |
+          Write-Host "=== 用 Windows PowerShell 5.1 执行 diagnose.ps1 ==="
+          Write-Host "这一步会暴露无 BOM 导致的解析失败"
+          $ErrorActionPreference = "Stop"
+          & "$env:GITHUB_WORKSPACE\diagnose.ps1"
+          if ($LASTEXITCODE -ne 0 -and $null -ne $LASTEXITCODE) {
+            throw "diagnose.ps1 退出码 $LASTEXITCODE"
+          }
+          Write-Host ""
+          Write-Host "OK  diagnose.ps1 在 PS 5.1 下执行成功"
+
+      - name: 【关键】用 PS 5.1 跑 install.ps1（用户的第二步）
+        shell: powershell
+        timeout-minutes: 15
+        run: |
+          Write-Host "=== 清空 DSH_HOME 模拟全新用户 ==="
+          $DSH = Join-Path $env:USERPROFILE ".dsh"
+          if (Test-Path $DSH) { Remove-Item -Recurse -Force $DSH -ErrorAction SilentlyContinue }
+
+          Write-Host "=== 用 Windows PowerShell 5.1 执行 install.ps1 ==="
+          $ErrorActionPreference = "Stop"
+          & "$env:GITHUB_WORKSPACE\install.ps1"
+          if ($LASTEXITCODE -ne 0 -and $null -ne $LASTEXITCODE) {
+            throw "install.ps1 退出码 $LASTEXITCODE"
+          }
+          Write-Host ""
+          Write-Host "OK  install.ps1 在 PS 5.1 下执行成功"
+
+      - name: 断言插件入口（装完能不能看到）
+        shell: powershell
+        run: |
+          $DSH = Join-Path $env:USERPROFILE ".dsh"
+          $profile = Join-Path $DSH "profiles\web"
+          $fail = 0
+
+          Write-Host "=== 1. 包是否就位 ==="
+          $pkg = Join-Path $profile "node_modules\dsh-purge\package.json"
+          if (Test-Path $pkg) {
+            $v = (Get-Content $pkg -Raw | ConvertFrom-Json).version
+            Write-Host "  OK   版本: $v"
+            if ($v -ne "1.1.71-rc2.1") { Write-Host "  FAIL 版本不符"; $fail = 1 }
+          } else {
+            Write-Host "  FAIL 包未就位: $pkg"; $fail = 1
+          }
+
+          Write-Host "=== 2. bundles 是否登记 ==="
+          $pj = Join-Path $profile "package.json"
+          if (Test-Path $pj) {
+            $d = Get-Content $pj -Raw | ConvertFrom-Json
+            $b = $d.dsh.profile.bundles
+            Write-Host "  bundles: $($b -join ',')"
+            if ($b -contains "dsh-purge") { Write-Host "  OK   dsh-purge 已登记" }
+            else { Write-Host "  FAIL dsh-purge 未登记"; $fail = 1 }
+            if ($b -contains "@deepseek-ai/dsh-base") { Write-Host "  OK   base 存在" }
+            else { Write-Host "  FAIL base 缺失"; $fail = 1 }
+          } else { Write-Host "  FAIL profile package.json 不存在"; $fail = 1 }
+
+          Write-Host "=== 3. cordis.patch.yml 是否登记 ==="
+          $py = Join-Path $profile "cordis.patch.yml"
+          if (Test-Path $py) {
+            $hit = (Select-String -Path $py -Pattern "dsh-purge" -SimpleMatch -ErrorAction SilentlyContinue).Count
+            Write-Host "  提及次数: $hit"
+            if ($hit -ge 1) { Write-Host "  OK   patch 已登记" }
+            else { Write-Host "  FAIL patch 未登记"; $fail = 1 }
+          } else { Write-Host "  FAIL cordis.patch.yml 不存在"; $fail = 1 }
+
+          if ($fail -ne 0) {
+            Write-Host "::error::插件入口检查失败，用户装完看不到 purge"
+            exit 1
+          }
+          Write-Host ""
+          Write-Host "=== 全部通过：PS 5.1 下装完能看到插件入口 ==="
+
+  # ══════════════════════════════════════════════════════════════
   # 清理逻辑测试：两个平台跑同一套
   # ══════════════════════════════════════════════════════════════
   cleanup-tests:
