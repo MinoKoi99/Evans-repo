@@ -804,7 +804,7 @@ bash --version
 **有 bash 的话**：
 
 ```powershell
-$SHA = "ba9d1ad5d28a9f4a55d658c390f5697537ddeeba"
+$SHA = "4ba9a476aa1ebb5f20b6834662196c7fa36b91c5"
 $BASE = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/$SHA/scripts"
 $D = Join-Path $env:TEMP ("dsh-clean-" + [guid]::NewGuid().ToString())
 New-Item -ItemType Directory -Path "$D\scripts" -Force | Out-Null
@@ -831,7 +831,7 @@ bash "$D/scripts/clean-all.sh" --dry-run
 ### macOS / Linux
 
 ```bash
-SHA="ba9d1ad5d28a9f4a55d658c390f5697537ddeeba"
+SHA="4ba9a476aa1ebb5f20b6834662196c7fa36b91c5"
 BASE="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/$SHA/scripts"
 D="$(mktemp -d)"
 mkdir -p "$D/scripts"
