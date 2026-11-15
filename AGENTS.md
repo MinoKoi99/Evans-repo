@@ -55,6 +55,30 @@ bash --noprofile --norc -e -o pipefail {0}
 
 ### 改 .github/workflows/
 
+- [ ] **`shell: powershell` 的 `run:` 块里禁止出现任何非 ASCII 字符（中文、全角括号、`「」` 等）**
+
+  这条我犯过两次，两次都让 CI 红：
+
+  ```yaml
+  # ❌ 会崩 —— PS 5.1 按 ANSI 解码，中文变乱码后破坏引号配对
+  - shell: powershell
+    run: |
+      Write-Host "  FAIL $($_.Name) : $($_.Count) 个错误"
+
+  # ✅ 用英文
+  - shell: powershell
+    run: |
+      Write-Host "  FAIL $($_.Name) : $($_.Count) errors"
+  ```
+
+  | shell | 解释器 | 中文 |
+  |---|---|---|
+  | `pwsh` | PowerShell 7 | 安全（默认 UTF-8） |
+  | `powershell` | Windows PowerShell 5.1 | **危险**（无 BOM 按 ANSI） |
+  | `bash` | Git Bash | 安全（按字节处理） |
+
+  **复杂逻辑不要内联，写成独立 `.ps1`（带 BOM）用 `-File` 调用。**
+
 - [ ] YAML 缩进：`paths:` 下的条目是 **6 空格**（不是 8）
   ```yaml
       paths:              # 4 空格
