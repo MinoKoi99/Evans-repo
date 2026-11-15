@@ -67,6 +67,68 @@ jobs:
             Write-Host "$f OK ($($t.Count) tokens)"
           }
 
+      - name: 所有 .ps1 必须有 UTF-8 BOM（关键）
+        shell: bash
+        run: |
+          set -uo pipefail
+          echo "=== 检查所有 .ps1 的 BOM ==="
+          echo "  原因：Windows PowerShell 5.1 读无 BOM 的 UTF-8 文件时按 ANSI(CP936) 解码，"
+          echo "        中文注释变乱码 → 引号配对错乱 → 语法错误。"
+          echo "        CI 的 pwsh 7 默认 UTF-8，测不出这个问题，所以必须单独检查字节。"
+          echo ""
+          FAIL=0
+          while IFS= read -r f; do
+            [ -z "$f" ] && continue
+            # 前 3 字节
+            if command -v xxd >/dev/null 2>&1; then
+              head3=$(xxd -l 3 -p "$f" 2>/dev/null)
+            else
+              head3=$(od -An -tx1 -N3 "$f" 2>/dev/null | tr -d ' \n')
+            fi
+            if [ "$head3" = "efbbbf" ]; then
+              echo "  OK   $f"
+            else
+              echo "  FAIL $f 缺少 BOM（前 3 字节: $head3）"
+              echo "       修复: printf '\xef\xbb\xbf' | cat - \"$f\" > /tmp/x && mv /tmp/x \"$f\""
+              FAIL=1
+            fi
+          done < <(find . -name "*.ps1" -not -path "./node_modules/*" -not -path "./.git/*" 2>/dev/null)
+          echo ""
+          if [ "$FAIL" != "0" ]; then
+            echo "::error::有 .ps1 文件缺少 UTF-8 BOM，Windows PowerShell 5.1 下会解析失败"
+            exit 1
+          fi
+          echo "全部 .ps1 都有 BOM"
+
+      - name: Windows PowerShell 5.1 解析（仅 Windows）
+        if: matrix.os == 'windows-latest'
+        shell: powershell
+        run: |
+          # 用系统自带的 Windows PowerShell 5.1，不是 pwsh 7
+          # 只有它能暴露「无 BOM 的 UTF-8 被按 ANSI 解码」这个问题
+          $fail = 0
+          Get-ChildItem -Recurse -Filter *.ps1 |
+            Where-Object { $_.FullName -notmatch 'node_modules' } |
+            ForEach-Object {
+              $e = $null; $t = $null
+              [System.Management.Automation.Language.Parser]::ParseFile(
+                $_.FullName, [ref]$t, [ref]$e) | Out-Null
+              if ($e.Count -gt 0) {
+                Write-Host "  FAIL $($_.Name) : $($e.Count) 个错误"
+                $e | Select-Object -First 3 | ForEach-Object {
+                  Write-Host "       行$($_.Extent.StartLineNumber): $($_.Message)"
+                }
+                $script:fail = 1
+              } else {
+                Write-Host "  OK   $($_.Name) ($($t.Count) tokens)"
+              }
+            }
+          if ($fail -ne 0) {
+            Write-Host "::error::PowerShell 5.1 解析失败，用户环境（Windows 自带 PS）会崩溃"
+            exit 1
+          }
+          Write-Host "全部通过 Windows PowerShell 5.1 解析"
+
       - name: 静态检查（危险操作 / 变量边界 / 版本一致性）
         run: node scripts/check-scripts.mjs
 

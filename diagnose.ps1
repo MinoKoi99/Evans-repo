@@ -1,4 +1,4 @@
-# dsh-purge 环境诊断（只读，不改任何东西）
+﻿# dsh-purge 环境诊断（只读，不改任何东西）
 # 用法：irm <raw 地址> | iex
 
 $ErrorActionPreference = "Continue"
