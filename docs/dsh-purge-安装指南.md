@@ -114,7 +114,7 @@ npm -v
 
 > **为什么脚本地址用 tag 而不是 commit SHA**
 >
-> GitHub 的 `raw.githubusercontent.com/<SHA>/...` 只对「曾经是分支最新提交」的 commit 返回 200，中间提交会 404。tag 不会移动，也不受这个限制，所以安装脚本固定到 tag。
+> 安装脚本固定到 **tag**（`plugin-install-fix-20261116`）。tag 一旦创建就不会移动，地址长期稳定；用 tag 也避免了直接引用某个 commit 时因仓库状态变化而取不到文件的情况。
 >
 > 当前 tag：`plugin-install-fix-20261116`
 
