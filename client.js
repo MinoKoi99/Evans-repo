@@ -8539,6 +8539,40 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 			);
 		}
 
+		/**
+		 * 单个组件崩溃时的隔离层。
+		 *
+		 * 背景：shell.overlay 里 6 个组件打包在一个 Fragment 里，
+		 * HeroNewSessionMount / TabRowPurgeMount 会用 createElement + appendChild
+		 * 直接操作宿主 DOM，宿主改版或页面切换时可能抛 NotFoundError，
+		 * 导致整个 Fragment 卸载 —— 右下角的 PurgeLauncher 按钮跟着消失。
+		 *
+		 * 每个组件单独包一层，一个崩了不影响其他。
+		 */
+		class SlotErrorBoundary extends react.Component {
+			constructor(props) {
+				super(props);
+				this.state = { crashed: false };
+			}
+			static getDerivedStateFromError() {
+				return { crashed: true };
+			}
+			componentDidCatch(error, info) {
+				try {
+					const name = this.props && this.props.slotName ? this.props.slotName : "?";
+					console.warn("[dsh-purge] slot crashed: " + name, error && error.message ? error.message : error);
+				} catch { /* ignore */ }
+			}
+			render() {
+				if (this.state.crashed) return null;
+				return this.props.children;
+			}
+		}
+		/** 包一层边界，slotName 只用于日志 */
+		function isolate(name, node) {
+			return h(SlotErrorBoundary, { slotName: name }, node);
+		}
+
 		function PurgeLauncher() {
 			const t = useT();
 			const st = useDock();
@@ -8710,7 +8744,14 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 				name: "shell.overlay",
 				id: "dsh-purge-dock",
 				order: 50,
-			}, () => h(react.Fragment, null, h(WelcomeNotice), h(PurgeLauncher), h(PurgeDock), h(HeroNewSessionMount), h(TabRowPurgeMount), h(EnvAdaptSendGate))));
+			}, () => h(react.Fragment, null,
+				isolate("WelcomeNotice", h(WelcomeNotice)),
+				isolate("PurgeLauncher", h(PurgeLauncher)),
+				isolate("PurgeDock", h(PurgeDock)),
+				isolate("HeroNewSessionMount", h(HeroNewSessionMount)),
+				isolate("TabRowPurgeMount", h(TabRowPurgeMount)),
+				isolate("EnvAdaptSendGate", h(EnvAdaptSendGate))
+			)));
 			try {
 				if (typeof ctx.inject === "function") {
 					ctx.inject(["sessions", "uiWorkspace", "workspaces", "conversation"], (host) => installRewindUi(host));
