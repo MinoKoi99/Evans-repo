@@ -42,7 +42,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest, macos-15-intel]
     steps:
       - uses: actions/checkout@v4
 
@@ -220,7 +220,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, windows-latest]
+        os: [macos-15-intel, windows-latest]
 
     steps:
       - uses: actions/checkout@v4
@@ -694,7 +694,7 @@ jobs:
   # ══════════════════════════════════════════════════════════════
   recovery:
     name: L2 失败场景自愈
-    runs-on: macos-latest
+    runs-on: macos-15-intel
     timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
@@ -925,7 +925,7 @@ jobs:
   # ══════════════════════════════════════════════════════════════
   e2e-macos:
     name: L2+L3 macOS / Node ${{ matrix.node }}
-    runs-on: macos-latest
+    runs-on: macos-15-intel
     timeout-minutes: 50
     strategy:
       fail-fast: false
