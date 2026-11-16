@@ -112,6 +112,12 @@ npm -v
 
 ---
 
+> **为什么脚本地址用 tag 而不是 commit SHA**
+>
+> GitHub 的 `raw.githubusercontent.com/<SHA>/...` 只对「曾经是分支最新提交」的 commit 返回 200，中间提交会 404。tag 不会移动，也不受这个限制，所以安装脚本固定到 tag。
+>
+> 当前 tag：`plugin-install-fix-20261116`
+
 ## 第 3 步：安装
 
 **下载 → 校验 → 执行，三步分开。** 不要用管道（`curl ... | bash`），下载失败时管道会静默返回成功，你会以为装上了实际什么都没发生。
@@ -119,7 +125,7 @@ npm -v
 ### Windows
 
 ```powershell
-$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/96cd6ef001d73809b95724af754e0bdeb672785b/install.ps1"
+$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/plugin-install-fix-20261116/install.ps1"
 $f = "$env:TEMP\dsh-install.ps1"
 Invoke-WebRequest -Uri $u -OutFile $f -UseBasicParsing
 if ((Get-Item $f).Length -lt 1000) { throw "下载不完整，请重试" }
@@ -130,7 +136,7 @@ if (-not (Select-String -Path $f -Pattern "dsh-purge" -SimpleMatch -Quiet)) { th
 ### macOS
 
 ```bash
-u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/96cd6ef001d73809b95724af754e0bdeb672785b/install.sh"
+u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/plugin-install-fix-20261116/install.sh"
 f="$(mktemp /tmp/dsh-install-XXXXXX.sh)"
 trap 'rm -f "$f"' EXIT
 curl -fsSL --retry 3 --retry-delay 2 -o "$f" "$u" || { echo "下载失败"; exit 1; }
@@ -180,12 +186,12 @@ bash "$f"
 
 ### 关于固定版本
 
-上面 URL 里的 `96cd6ef001d73809b95724af754e0bdeb672785b` 是**固定提交**，不是 `master`。
+上面 URL 里的 `plugin-install-fix-20261116` 是**固定提交**，不是 `master`。
 
 - 好处：内容不会随时间变化，你装的和你看到的文档是同一份
 - 代价：后续修复不会自动到你手上，需要重新按新文档执行
 
-**如果你想用最新版**，把 URL 里的 `96cd6ef001d73809b95724af754e0bdeb672785b` 换成 `master`，但仍建议保留「先下载再校验」的三步结构。
+**如果你想用最新版**，把 URL 里的 `plugin-install-fix-20261116` 换成 `master`，但仍建议保留「先下载再校验」的三步结构。
 
 ---
 
@@ -541,7 +547,7 @@ npm i -g @deepseek-ai/dsh@0.2.1-rc.2 --allow-scripts=@deepseek-ai/dsh-subprocess
 GitHub 网络问题，重跑一次。多次失败可以试镜像：
 
 ```powershell
-$u = "https://ghfast.top/https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/96cd6ef001d73809b95724af754e0bdeb672785b/install.ps1"
+$u = "https://ghfast.top/https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/plugin-install-fix-20261116/install.ps1"
 $f = "$env:TEMP\dsh-install.ps1"
 Invoke-WebRequest -Uri $u -OutFile $f -UseBasicParsing
 if ((Get-Item $f).Length -lt 1000) { throw "下载不完整，请重试" }
@@ -549,7 +555,7 @@ if ((Get-Item $f).Length -lt 1000) { throw "下载不完整，请重试" }
 ```
 
 ```bash
-u="https://ghfast.top/https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/96cd6ef001d73809b95724af754e0bdeb672785b/install.sh"
+u="https://ghfast.top/https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/plugin-install-fix-20261116/install.sh"
 f="$(mktemp /tmp/dsh-install-XXXXXX.sh)"
 trap 'rm -f "$f"' EXIT
 curl -fsSL --retry 3 -o "$f" "$u" || { echo "下载失败"; exit 1; }
@@ -583,7 +589,7 @@ node -p "require(require('os').homedir()+'/.dsh/profiles/web/node_modules/dsh-pu
 
 **Windows**
 ```powershell
-$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/96cd6ef001d73809b95724af754e0bdeb672785b/diagnose.ps1"
+$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/plugin-install-fix-20261116/diagnose.ps1"
 $f = "$env:TEMP\dsh-diagnose.ps1"
 Invoke-WebRequest -Uri $u -OutFile $f -UseBasicParsing
 if ((Get-Item $f).Length -lt 500) { throw "下载不完整，请重试" }
@@ -592,7 +598,7 @@ if ((Get-Item $f).Length -lt 500) { throw "下载不完整，请重试" }
 
 **macOS**
 ```bash
-u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/96cd6ef001d73809b95724af754e0bdeb672785b/diagnose.sh"
+u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/plugin-install-fix-20261116/diagnose.sh"
 f="$(mktemp /tmp/dsh-diagnose-XXXXXX.sh)"
 curl -fsSL --retry 3 -o "$f" "$u" || { echo "下载失败"; exit 1; }
 [ "$(wc -c <"$f")" -ge 3000 ] || { echo "文件长度异常"; exit 1; }
