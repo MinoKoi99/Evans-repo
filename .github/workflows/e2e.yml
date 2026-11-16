@@ -561,7 +561,7 @@ jobs:
         run: |
           set -uo pipefail
           echo "=== 从两份文档提取所有 raw.githubusercontent URL ==="
-          URLS=$(grep -ohE 'https://raw\.githubusercontent\.com/evan545295555-hash/Evans-repo/[0-9a-f]{40}/[a-z-]+\.(sh|ps1)' docs/*.md | sort -u || true)
+          URLS=$(grep -ohE 'https://raw\.githubusercontent\.com/evan545295555-hash/Evans-repo/([0-9a-f]{40}|[A-Za-z0-9][A-Za-z0-9._-]*)/[A-Za-z0-9_./-]+\.(sh|ps1)' docs/*.md | sort -u || true)
           if [ -z "$URLS" ]; then
             echo "::error::文档里没有找到固定 SHA 的下载 URL"
             exit 1
@@ -591,13 +591,14 @@ jobs:
           # 验证固定 SHA 的 install.sh 内容正确
           echo ""
           echo "=== 验证 install.sh 关键修复都在 ==="
-          SHA=$(echo "$URLS" | grep 'install\.sh' | head -1 | grep -oE '[0-9a-f]{40}' || true)
-          if [ -z "$SHA" ]; then
-            echo "::error::文档里没有 install.sh 的固定 SHA URL"
+          REF=$(echo "$URLS" | grep 'install\.sh' | head -1 | sed -E 's#.*/Evans-repo/([^/]+)/.*#\1#' || true)
+          if [ -z "$REF" ]; then
+            echo "::error::文档里没有 install.sh 的固定引用 URL"
             exit 1
           fi
+          echo "  install.sh 引用的 ref: $REF"
           f="$(mktemp)"
-          curl -fsSL --retry 3 -o "$f" "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/$SHA/install.sh"
+          curl -fsSL --retry 3 -o "$f" "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/$REF/install.sh"
           for kw in "检测到已装" "已补齐缺失的 base" "conpty" "allow-scripts" "set -euo pipefail"; do
             if grep -q "$kw" "$f"; then
               echo "  OK  含「$kw」"
