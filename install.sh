@@ -161,7 +161,10 @@ fi
 # ── 5) 下载插件包 ──────────────────────────────────────────
 TMP="${TMPDIR:-/tmp}/dsh-purge-${PLUGIN_VERSION}.tgz"
 say "下载插件 ${PLUGIN_VERSION}"
-curl -fsSL --retry 3 --retry-delay 3 -o "$TMP" "$PKG" || die "下载失败"
+# release 资产会走 CDN 缓存，覆盖同名资产后旧缓存仍可能命中。
+# 下载时带唯一参数绕缓存；写入 dependencies 的仍是干净 URL。
+PKG_FETCH="${PKG}?cb=$(date +%s)"
+curl -fsSL --retry 3 --retry-delay 3 -o "$TMP" "$PKG_FETCH" || die "下载失败"
 ok "已下载 $(du -h "$TMP" | cut -f1)"
 
 # ── 6) npm 直装（绕开 dsh plugin，与 Windows 版同一套逻辑）──

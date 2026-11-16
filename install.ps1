@@ -185,7 +185,10 @@ try {
 $tmp = Join-Path $env:TEMP "dsh-purge-$PluginVersion.tgz"
 Say "下载插件 $PluginVersion"
 try {
-  Invoke-WebRequest -Uri $PkgUrl -OutFile $tmp -UseBasicParsing
+  # release 资产会走 CDN 缓存，覆盖同名资产后旧缓存仍可能命中。
+  # 下载时带一个唯一参数绕过缓存；写进 dependencies 的仍是干净 URL。
+  $PkgUrlFetch = $PkgUrl + "?cb=" + [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
+  Invoke-WebRequest -Uri $PkgUrlFetch -OutFile $tmp -UseBasicParsing
 } catch {
   Die "下载失败：$($_.Exception.Message)"
 }
