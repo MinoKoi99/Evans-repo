@@ -5,3 +5,7 @@ node_modules/
 *.orig
 .env
 *.tgz
+
+# 本地备份文件
+*.bak-*
+*.bak
