@@ -99,8 +99,8 @@ if (Test-Path $pkg) {
     $pv = ""
     try { $pv = (Get-Content (Join-Path $pkg "package.json") -Raw | ConvertFrom-Json).version } catch { }
     Ok "已装: $pv"
-    if ($pv -eq "1.1.71-rc2.2") { Ok "版本正确" }
-    else { Warn2 "版本不是 1.1.71-rc2.2，可能缺修复" }
+    if ($pv -eq "1.1.72") { Ok "版本正确" }
+    else { Warn2 "版本不是 1.1.72，可能缺修复" }
 } else {
     Info "未安装"
 }

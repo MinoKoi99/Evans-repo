@@ -66,7 +66,7 @@ H="$(new_home fresh)"
 info "DSH_HOME=$H"
 RC="$(run_install "$H")"
 [ "$RC" = "0" ] && ok "install.sh 退出码 0" || { bad "install.sh 退出码 $RC"; tail -5 "$H/install.log" | info; }
-verify_plugin "$H" "1.1.71-rc2.2" "A"
+verify_plugin "$H" "1.1.72" "A"
 
 # ══════════════════════════════════════════════════════════════
 head_ "场景 B：已装旧版插件（1.1.71，缺修复）"
@@ -83,7 +83,7 @@ OLD="$(node -p "require('$H/profiles/web/node_modules/dsh-purge/package.json').v
 info "伪造后版本: $OLD"
 RC="$(run_install "$H")"
 [ "$RC" = "0" ] && ok "重跑 install.sh 退出码 0" || bad "退出码 $RC"
-verify_plugin "$H" "1.1.71-rc2.2" "B"
+verify_plugin "$H" "1.1.72" "B"
 
 # ══════════════════════════════════════════════════════════════
 head_ "场景 C：bundles 里有死引用 + 缺 base"
@@ -100,7 +100,7 @@ fs.writeFileSync(p, JSON.stringify(d,null,2));
 info "破坏后 bundles: $(node -p "require('$H/profiles/web/package.json').dsh.profile.bundles.join(',')")"
 RC="$(run_install "$H")"
 [ "$RC" = "0" ] && ok "重跑 install.sh 退出码 0" || bad "退出码 $RC"
-verify_plugin "$H" "1.1.71-rc2.2" "C"
+verify_plugin "$H" "1.1.72" "C"
 
 # ══════════════════════════════════════════════════════════════
 head_ "场景 D：cordis.patch.yml 里 dsh-purge 条目被删光"
@@ -117,7 +117,7 @@ fs.writeFileSync(p,t);
 info "清空后 patch 提及: $(grep -c 'dsh-purge' "$H/profiles/web/cordis.patch.yml" 2>/dev/null || echo 0)"
 RC="$(run_install "$H")"
 [ "$RC" = "0" ] && ok "重跑 install.sh 退出码 0" || bad "退出码 $RC"
-verify_plugin "$H" "1.1.71-rc2.2" "D"
+verify_plugin "$H" "1.1.72" "D"
 
 # ══════════════════════════════════════════════════════════════
 head_ "场景 E：node_modules 里的包被删（目录残留）"
@@ -128,7 +128,7 @@ rm -rf "$H/profiles/web/node_modules/dsh-purge"
 info "已删除 node_modules/dsh-purge"
 RC="$(run_install "$H")"
 [ "$RC" = "0" ] && ok "重跑 install.sh 退出码 0" || bad "退出码 $RC"
-verify_plugin "$H" "1.1.71-rc2.2" "E"
+verify_plugin "$H" "1.1.72" "E"
 
 # ══════════════════════════════════════════════════════════════
 head_ "场景 F：preset-declare.json 状态是 registered-broken"
@@ -142,7 +142,7 @@ JSON
 info "已伪造 broken 状态"
 RC="$(run_install "$H")"
 [ "$RC" = "0" ] && ok "重跑 install.sh 退出码 0" || bad "退出码 $RC"
-verify_plugin "$H" "1.1.71-rc2.2" "F"
+verify_plugin "$H" "1.1.72" "F"
 info "（preset 是否修好需真人点「应用」，此处只验安装层面）"
 
 # ══════════════════════════════════════════════════════════════
@@ -153,7 +153,7 @@ for i in 1 2 3; do
   RC="$(run_install "$H")"
   [ "$RC" = "0" ] && ok "第 $i 次安装退出码 0" || bad "第 $i 次退出码 $RC"
 done
-verify_plugin "$H" "1.1.71-rc2.2" "G"
+verify_plugin "$H" "1.1.72" "G"
 BUNDLE_COUNT="$(node -p "require('$H/profiles/web/package.json').dsh.profile.bundles.filter(x=>x==='dsh-purge').length" 2>/dev/null || echo 0)"
 [ "$BUNDLE_COUNT" = "1" ] && ok "G: dsh-purge 在 bundles 里只出现 1 次（无重复）" || bad "G: dsh-purge 出现 $BUNDLE_COUNT 次"
 PATCH_COUNT="$(grep -c 'id: dsh-purge' "$H/profiles/web/cordis.patch.yml" 2>/dev/null || echo 0)"

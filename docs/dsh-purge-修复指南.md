@@ -12,7 +12,7 @@
 ### Windows
 
 ```powershell
-$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.71-rc2.2/diagnose.ps1"
+$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.72/diagnose.ps1"
 $f = "$env:TEMP\dsh-diagnose.ps1"
 Invoke-WebRequest -Uri $u -OutFile $f -UseBasicParsing
 if ((Get-Item $f).Length -lt 500) { throw "下载不完整，请重试" }
@@ -22,7 +22,7 @@ if ((Get-Item $f).Length -lt 500) { throw "下载不完整，请重试" }
 ### macOS
 
 ```bash
-u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.71-rc2.2/diagnose.sh"
+u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.72/diagnose.sh"
 f="$(mktemp /tmp/dsh-diagnose-XXXXXX.sh)"
 trap 'rm -f "$f"' EXIT
 curl -fsSL --retry 3 -o "$f" "$u" || { echo "下载失败"; exit 1; }
@@ -64,7 +64,7 @@ bash "$f"
   [OK]   来自当前 Node 安装（正确）
 
 5. 插件 (dsh-purge)
-  [OK]   已装: 1.1.71-rc2.2
+  [OK]   已装: 1.1.72
   [OK]   版本正确
 
 6. profile 配置
@@ -144,7 +144,7 @@ npm -v
 
 ```powershell
 # Windows
-$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.71-rc2.2/install.ps1"
+$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.72/install.ps1"
 $f = "$env:TEMP\dsh-install.ps1"
 Invoke-WebRequest -Uri $u -OutFile $f -UseBasicParsing
 if ((Get-Item $f).Length -lt 5000) { throw "文件长度异常，请重试" }
@@ -153,7 +153,7 @@ if ((Get-Item $f).Length -lt 5000) { throw "文件长度异常，请重试" }
 
 ```bash
 # macOS
-u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.71-rc2.2/install.sh"
+u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.72/install.sh"
 f="$(mktemp /tmp/dsh-install-XXXXXX.sh)"
 trap 'rm -f "$f"' EXIT
 curl -fsSL --retry 3 -o "$f" "$u" || { echo "下载失败"; exit 1; }
@@ -174,13 +174,13 @@ node -p "require(process.env.USERPROFILE+'/.dsh/profiles/web/node_modules/dsh-pu
 node -p "require(require('os').homedir()+'/.dsh/profiles/web/node_modules/dsh-purge/package.json').version"
 ```
 
-**必须输出 `1.1.71-rc2.2`**
+**必须输出 `1.1.72`**
 
 ---
 
 # 情况 2：插件是旧版 1.1.71
 
-**诊断显示**：`5. 插件: 1.1.71` / `[WARN] 版本不是 1.1.71-rc2.2，可能缺修复`
+**诊断显示**：`5. 插件: 1.1.71` / `[WARN] 版本不是 1.1.72，可能缺修复`
 
 **症状**：点「应用」时报
 
@@ -198,13 +198,13 @@ node -p "require(require('os').homedir()+'/.dsh/profiles/web/node_modules/dsh-pu
 
 旧版 `1.1.71` 检测宿主时只认一种目录布局（`@deepseek-ai/dsh-system-prompt`），但 npm 全局安装默认是嵌套布局（`@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-system-prompt`），旧版找不到就以为「没写进宿主」。
 
-`1.1.71-rc2.2` 修了这个问题（4 个候选路径）。
+`1.1.72` 修了这个问题（4 个候选路径）。
 
 ## 修复：重跑安装脚本（新版会自动清掉旧版）
 
 ```powershell
 # Windows
-$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.71-rc2.2/install.ps1"
+$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.72/install.ps1"
 $f = "$env:TEMP\dsh-install.ps1"
 Invoke-WebRequest -Uri $u -OutFile $f -UseBasicParsing
 if ((Get-Item $f).Length -lt 5000) { throw "文件长度异常，请重试" }
@@ -213,7 +213,7 @@ if ((Get-Item $f).Length -lt 5000) { throw "文件长度异常，请重试" }
 
 ```bash
 # macOS
-u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.71-rc2.2/install.sh"
+u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.72/install.sh"
 f="$(mktemp /tmp/dsh-install-XXXXXX.sh)"
 trap 'rm -f "$f"' EXIT
 curl -fsSL --retry 3 -o "$f" "$u" || { echo "下载失败"; exit 1; }
@@ -225,7 +225,7 @@ bash "$f"
 **新版会输出这一行**：
 
 ```
-==> 检测到已装 1.1.71，先移除再装 1.1.71-rc2.2
+==> 检测到已装 1.1.71，先移除再装 1.1.72
 ```
 
 ## 如果重跑后版本还是 1.1.71
@@ -235,7 +235,7 @@ bash "$f"
 ```powershell
 # Windows
 Remove-Item -Recurse -Force "$env:USERPROFILE\.dsh\profiles\web\node_modules\dsh-purge"
-$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.71-rc2.2/install.ps1"
+$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.72/install.ps1"
 $f = "$env:TEMP\dsh-install.ps1"
 Invoke-WebRequest -Uri $u -OutFile $f -UseBasicParsing
 if ((Get-Item $f).Length -lt 5000) { throw "文件长度异常，请重试" }
@@ -245,7 +245,7 @@ if ((Get-Item $f).Length -lt 5000) { throw "文件长度异常，请重试" }
 ```bash
 # macOS
 rm -rf ~/.dsh/profiles/web/node_modules/dsh-purge
-u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.71-rc2.2/install.sh"
+u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.72/install.sh"
 f="$(mktemp /tmp/dsh-install-XXXXXX.sh)"
 trap 'rm -f "$f"' EXIT
 curl -fsSL --retry 3 -o "$f" "$u" || { echo "下载失败"; exit 1; }
@@ -260,7 +260,7 @@ bash "$f"
 node -p "require(require('os').homedir()+'/.dsh/profiles/web/node_modules/dsh-purge/package.json').version"
 ```
 
-**必须是 `1.1.71-rc2.2`**
+**必须是 `1.1.72`**
 
 ---
 
@@ -420,7 +420,7 @@ pty.node   或   conpty.node
 
 ```powershell
 # Windows
-$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.71-rc2.2/install.ps1"
+$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.72/install.ps1"
 $f = "$env:TEMP\dsh-install.ps1"
 Invoke-WebRequest -Uri $u -OutFile $f -UseBasicParsing
 if ((Get-Item $f).Length -lt 5000) { throw "文件长度异常，请重试" }
@@ -429,7 +429,7 @@ if ((Get-Item $f).Length -lt 5000) { throw "文件长度异常，请重试" }
 
 ```bash
 # macOS
-u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.71-rc2.2/install.sh"
+u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.72/install.sh"
 f="$(mktemp /tmp/dsh-install-XXXXXX.sh)"
 trap 'rm -f "$f"' EXIT
 curl -fsSL --retry 3 -o "$f" "$u" || { echo "下载失败"; exit 1; }
@@ -456,7 +456,7 @@ bash "$f"
 
 ```powershell
 # Windows
-$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.71-rc2.2/install.ps1"
+$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.72/install.ps1"
 $f = "$env:TEMP\dsh-install.ps1"
 Invoke-WebRequest -Uri $u -OutFile $f -UseBasicParsing
 if ((Get-Item $f).Length -lt 5000) { throw "文件长度异常，请重试" }
@@ -465,7 +465,7 @@ if ((Get-Item $f).Length -lt 5000) { throw "文件长度异常，请重试" }
 
 ```bash
 # macOS
-u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.71-rc2.2/install.sh"
+u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.72/install.sh"
 f="$(mktemp /tmp/dsh-install-XXXXXX.sh)"
 trap 'rm -f "$f"' EXIT
 curl -fsSL --retry 3 -o "$f" "$u" || { echo "下载失败"; exit 1; }
@@ -899,7 +899,7 @@ echo "宿主已清"
 
 ```powershell
 # Windows
-$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.71-rc2.2/diagnose.ps1"
+$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.72/diagnose.ps1"
 $f = "$env:TEMP\dsh-diagnose.ps1"
 Invoke-WebRequest -Uri $u -OutFile $f -UseBasicParsing
 if ((Get-Item $f).Length -lt 500) { throw "下载不完整，请重试" }
@@ -908,7 +908,7 @@ if ((Get-Item $f).Length -lt 500) { throw "下载不完整，请重试" }
 
 ```bash
 # macOS
-u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.71-rc2.2/diagnose.sh"
+u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.72/diagnose.sh"
 f="$(mktemp /tmp/dsh-diagnose-XXXXXX.sh)"
 trap 'rm -f "$f"' EXIT
 curl -fsSL --retry 3 -o "$f" "$u" || { echo "下载失败"; exit 1; }
@@ -1120,7 +1120,7 @@ irm : 基础连接已经关闭
 
 **Windows**
 ```powershell
-$u = "https://ghfast.top/https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.71-rc2.2/install.ps1"
+$u = "https://ghfast.top/https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.72/install.ps1"
 $f = "$env:TEMP\dsh-install.ps1"
 Invoke-WebRequest -Uri $u -OutFile $f -UseBasicParsing
 if ((Get-Item $f).Length -lt 5000) { throw "文件长度异常，请重试" }
@@ -1129,7 +1129,7 @@ if ((Get-Item $f).Length -lt 5000) { throw "文件长度异常，请重试" }
 
 **macOS**
 ```bash
-u="https://ghfast.top/https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.71-rc2.2/install.sh"
+u="https://ghfast.top/https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.72/install.sh"
 f="$(mktemp /tmp/dsh-install-XXXXXX.sh)"
 trap 'rm -f "$f"' EXIT
 curl -fsSL --retry 3 -o "$f" "$u" || { echo "下载失败"; exit 1; }
@@ -1189,7 +1189,7 @@ console.log("✅ 应用已写入宿主");
 
 ```powershell
 # Windows
-$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.71-rc2.2/diagnose.ps1"
+$u = "https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.72/diagnose.ps1"
 $f = "$env:TEMP\dsh-diagnose.ps1"
 Invoke-WebRequest -Uri $u -OutFile $f -UseBasicParsing
 if ((Get-Item $f).Length -lt 500) { throw "下载不完整，请重试" }
@@ -1198,7 +1198,7 @@ if ((Get-Item $f).Length -lt 500) { throw "下载不完整，请重试" }
 
 ```bash
 # macOS
-u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.71-rc2.2/diagnose.sh"
+u="https://raw.githubusercontent.com/evan545295555-hash/Evans-repo/v1.1.72/diagnose.sh"
 f="$(mktemp /tmp/dsh-diagnose-XXXXXX.sh)"
 trap 'rm -f "$f"' EXIT
 curl -fsSL --retry 3 -o "$f" "$u" || { echo "下载失败"; exit 1; }
@@ -1225,7 +1225,7 @@ bash "$f"
 
 | 证据 | 命令 | 通过标准 |
 |---|---|---|
-| 1. 版本 | 见安装指南第 7 步第 1 小节 | `1.1.71-rc2.2` |
+| 1. 版本 | 见安装指南第 7 步第 1 小节 | `1.1.72` |
 | 2. 本次启动加载了插件 | 见安装指南第 7 步第 2 小节 | `at` 距现在 < 10 分钟 + `registered` + `broken: null` |
 | 3. 应用写进了宿主 | 见安装指南第 7 步第 3 小节 | 全新环境标记从 `0` 变 `> 0` |
 

@@ -54,10 +54,10 @@ if (Test-Path $pkg) {
         $d = Get-Content $pkg -Raw -ErrorAction Stop | ConvertFrom-Json
         $v = $d.version
         Write-Host "      version: $v"
-        if ($v -eq "1.1.71-rc2.2") {
-            Check-Ok "version is 1.1.71-rc2.2"
+        if ($v -eq "1.1.72") {
+            Check-Ok "version is 1.1.72"
         } else {
-            Check-Fail "version mismatch, expected 1.1.71-rc2.2, got $v"
+            Check-Fail "version mismatch, expected 1.1.72, got $v"
         }
     } catch {
         Check-Fail "package.json parse error: $($_.Exception.Message)"

@@ -174,7 +174,7 @@ jobs:
           Set-Location (Join-Path $env:DSH_HOME "profiles\web")
           $v = node -p "require('./node_modules/dsh-purge/package.json').version"
           Write-Host "installed version: $v"
-          if ($v -ne "1.1.71-rc2.2") { throw "版本不符：$v" }
+          if ($v -ne "1.1.72") { throw "版本不符：$v" }
 
       - name: 断言挂载（文件级，绕过 dump-config）
         shell: pwsh
@@ -249,7 +249,7 @@ jobs:
           if (-not (Test-Path $pkg)) { throw "脚本跑完但包不存在" }
           $v = (Get-Content $pkg -Raw | ConvertFrom-Json).version
           Write-Host "  version: $v"
-          if ($v -ne "1.1.71-rc2.2") { throw "版本不符: $v" }
+          if ($v -ne "1.1.72") { throw "版本不符: $v" }
 
           $dep = (Get-Content (Join-Path $profile "package.json") -Raw | ConvertFrom-Json).dependencies.'dsh-purge'
           Write-Host "  dependencies.dsh-purge: $dep"

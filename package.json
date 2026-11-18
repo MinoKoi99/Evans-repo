@@ -1,6 +1,6 @@
 {
   "name": "dsh-purge",
-  "version": "1.1.71-rc2.2",
+  "version": "1.1.72",
   "description": "DeepSeek Harness 破甲：让所有模型都能破甲，不同模型可换不同提示词；默认提示词面向国模「小码酱」。Jailbreak for every model — swap prompts per model. 求 Star 收藏 ⭐ 如要二开，请查看署名要求部分",
   "type": "module",
   "main": "lib/index.js",
@@ -79,8 +79,8 @@
     },
     "install": {
       "preferred": "tarball",
-      "tarball": "https://github.com/evan545295555-hash/Evans-repo/releases/download/v1.1.71-rc2.2/dsh-purge-1.1.71-rc2.2.tgz",
-      "zip": "https://github.com/evan545295555-hash/Evans-repo/archive/refs/tags/v1.1.71-rc2.2.zip",
+      "tarball": "https://github.com/evan545295555-hash/Evans-repo/releases/download/v1.1.72/dsh-purge-1.1.72.tgz",
+      "zip": "https://github.com/evan545295555-hash/Evans-repo/archive/refs/tags/v1.1.72.zip",
       "git": "git+https://github.com/evan545295555-hash/Evans-repo.git"
     }
   },

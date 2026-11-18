@@ -815,7 +815,7 @@ jobs:
           if (-not (Test-Path $pkg)) { throw "包未就位" }
           $v = (Get-Content $pkg -Raw | ConvertFrom-Json).version
           Write-Host "  版本: $v"
-          if ($v -ne "1.1.71-rc2.2") { throw "版本不符: $v" }
+          if ($v -ne "1.1.72") { throw "版本不符: $v" }
 
           $dep = (Get-Content (Join-Path $profile "package.json") -Raw | ConvertFrom-Json).dependencies.'dsh-purge'
           Write-Host "  deps: $dep"
@@ -1002,7 +1002,7 @@ jobs:
           [ -f "$PKG" ] || { echo "::error::包未就位"; exit 1; }
           V="$(node -p "require('$PKG').version")"
           echo "  版本: $V"
-          [ "$V" = "1.1.71-rc2.2" ] || { echo "::error::版本不符: $V"; exit 1; }
+          [ "$V" = "1.1.72" ] || { echo "::error::版本不符: $V"; exit 1; }
 
           DEP="$(node -p "require('$PROFILE/package.json').dependencies['dsh-purge'] || ''")"
           echo "  deps: $DEP"

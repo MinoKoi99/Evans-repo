@@ -99,10 +99,10 @@ PKG="$WEB/node_modules/dsh-purge"
 if [ -d "$PKG" ]; then
   PV="$(node -p "require('$PKG/package.json').version" 2>/dev/null || echo '')"
   ok "已装: $PV"
-  if [ "$PV" = "1.1.71-rc2.2" ]; then
+  if [ "$PV" = "1.1.72" ]; then
     ok "版本正确"
   else
-    warn "版本不是 1.1.71-rc2.2，可能缺修复"
+    warn "版本不是 1.1.72，可能缺修复"
   fi
 else
   info "未安装"

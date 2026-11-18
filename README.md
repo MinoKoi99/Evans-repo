@@ -200,7 +200,7 @@ The script does six things:
 Success looks like:
 
 ```
-OK  installed: dsh-purge 1.1.71-rc2.2
+OK  installed: dsh-purge 1.1.72
 ```
 
 **Then restart the host** (quit from tray, reopen), and click **dsh-purge → Clean → Apply**.
@@ -214,7 +214,7 @@ Set-Location $p
 if (-not (Test-Path package.json)) {
   '{"name":"dsh-profile-web","private":true,"dependencies":{}}' | Set-Content package.json
 }
-npm install --save --ignore-scripts https://github.com/evan545295555-hash/Evans-repo/releases/download/v1.1.71-rc2.2/dsh-purge-1.1.71-rc2.2.tgz
+npm install --save --ignore-scripts https://github.com/evan545295555-hash/Evans-repo/releases/download/v1.1.72/dsh-purge-1.1.72.tgz
 node node_modules\dsh-purge\scripts\ensure-profile-bundle.mjs
 ```
 
