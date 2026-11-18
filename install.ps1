@@ -1,4 +1,4 @@
-﻿# dsh-purge 1.1.71-rc2.1 一键安装（Windows PowerShell）
+﻿# dsh-purge 1.1.71-rc2.2 一键安装（Windows PowerShell）
 # 用法（推荐，能发现下载失败）：
 #   $u = "<raw 地址>"; $f = "$env:TEMP\dsh-install.ps1"
 #   Invoke-WebRequest -Uri $u -OutFile $f -UseBasicParsing
@@ -8,7 +8,7 @@
 #   irm <raw 地址> | iex
 $ErrorActionPreference = "Stop"
 
-$PluginVersion = "1.1.71-rc2.1"
+$PluginVersion = "1.1.71-rc2.2"
 $HostVersion   = "0.2.1-rc.2"
 $PkgUrl = "https://github.com/evan545295555-hash/Evans-repo/releases/download/v$PluginVersion/dsh-purge-$PluginVersion.tgz"
 $DshHomeDir = if ($env:DSH_HOME) { $env:DSH_HOME } else { Join-Path $env:USERPROFILE ".dsh" }

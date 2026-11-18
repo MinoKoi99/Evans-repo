@@ -201,7 +201,7 @@ bash "$f"
 
 **Windows**
 ```
-==> dsh-purge 1.1.71-rc2.1 安装器（Windows）
+==> dsh-purge 1.1.71-rc2.2 安装器（Windows）
 OK  Node v24.16.0
 OK  npm 策略 hoisted
 OK  已装宿主 0.2.1-rc.2（兼容）        ← 已有宿主就跳过安装
@@ -209,12 +209,12 @@ OK  布局：嵌套（npm 全局默认，插件已兼容）
 OK  原生模块已就绪                      ← 或「补跑原生模块构建…」后 OK
 ==> profile: C:\Users\xxx\.dsh\profiles\web
 OK  已补齐缺失的 base / web-app
-==> 下载插件 1.1.71-rc2.1
+==> 下载插件 1.1.71-rc2.2
 OK  已下载 2.1 MB
 ==> 安装插件到 profile
 OK  插件已写入 node_modules
 ==> 登记到 profile bundles
-OK  安装完成：dsh-purge 1.1.71-rc2.1
+OK  安装完成：dsh-purge 1.1.71-rc2.2
 
   ────────────────────────────────
    你给巴里啊啊点赞了吗？
@@ -314,7 +314,7 @@ dsh web --port 3081
 
 ---
 
-### 第 1 步：确认装的是 1.1.71-rc2.1
+### 第 1 步：确认装的是 1.1.71-rc2.2
 
 **Windows**
 ```powershell
@@ -326,7 +326,7 @@ node -p "require(process.env.USERPROFILE + '/.dsh/profiles/web/node_modules/dsh-
 node -p "require(require('os').homedir()+'/.dsh/profiles/web/node_modules/dsh-purge/package.json').version"
 ```
 
-**必须输出 `1.1.71-rc2.1`。** 是 `1.1.71` 就回到第 3 步重装。
+**必须输出 `1.1.71-rc2.2`。** 是 `1.1.71` 就回到第 3 步重装。
 
 ---
 
@@ -509,7 +509,7 @@ t0+140  你跑验收 → 文件年龄 = 140 秒 < 600 → 判定成功  ← 误�
 ### 三步全过才算装好
 
 ```
-第 1 步  版本 = 1.1.71-rc2.1                        ✅
+第 1 步  版本 = 1.1.71-rc2.2                        ✅
 第 2 步  preset-declare.json 是本次启动写的 + registered + broken=null  ✅
 第 3 步  宿主源码里有 [dsh-purge] 标记               ✅
 ```
@@ -566,14 +566,14 @@ bash "$f"
 
 ### Q3: 点「应用」报「清洗没有写进全部宿主」
 
-插件版本不对（装了旧版 `1.1.71` 而不是 `1.1.71-rc2.1`）。
+插件版本不对（装了旧版 `1.1.71` 而不是 `1.1.71-rc2.2`）。
 
 **查版本**
 ```bash
 node -p "require(require('os').homedir()+'/.dsh/profiles/web/node_modules/dsh-purge/package.json').version"
 ```
 
-**不是 `1.1.71-rc2.1` 就重跑第 3 步**（新版会自动清掉旧版再装）。
+**不是 `1.1.71-rc2.2` 就重跑第 3 步**（新版会自动清掉旧版再装）。
 
 ### Q4: dsh-purge 按钮完全不出现
 
@@ -630,7 +630,7 @@ bash "$f"
 |---|---|
 | Node | `v20.x` 以上 |
 | 宿主 | `@deepseek-ai/dsh@0.2.1-rc.2` |
-| 插件 | `1.1.71-rc2.1` |
+| 插件 | `1.1.71-rc2.2` |
 | 插件数 | `19` |
 | phase | `registered` |
 | broken | `null` |

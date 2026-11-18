@@ -64,7 +64,7 @@ bash "$f"
   [OK]   来自当前 Node 安装（正确）
 
 5. 插件 (dsh-purge)
-  [OK]   已装: 1.1.71-rc2.1
+  [OK]   已装: 1.1.71-rc2.2
   [OK]   版本正确
 
 6. profile 配置
@@ -174,13 +174,13 @@ node -p "require(process.env.USERPROFILE+'/.dsh/profiles/web/node_modules/dsh-pu
 node -p "require(require('os').homedir()+'/.dsh/profiles/web/node_modules/dsh-purge/package.json').version"
 ```
 
-**必须输出 `1.1.71-rc2.1`**
+**必须输出 `1.1.71-rc2.2`**
 
 ---
 
 # 情况 2：插件是旧版 1.1.71
 
-**诊断显示**：`5. 插件: 1.1.71` / `[WARN] 版本不是 1.1.71-rc2.1，可能缺修复`
+**诊断显示**：`5. 插件: 1.1.71` / `[WARN] 版本不是 1.1.71-rc2.2，可能缺修复`
 
 **症状**：点「应用」时报
 
@@ -198,7 +198,7 @@ node -p "require(require('os').homedir()+'/.dsh/profiles/web/node_modules/dsh-pu
 
 旧版 `1.1.71` 检测宿主时只认一种目录布局（`@deepseek-ai/dsh-system-prompt`），但 npm 全局安装默认是嵌套布局（`@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-system-prompt`），旧版找不到就以为「没写进宿主」。
 
-`1.1.71-rc2.1` 修了这个问题（4 个候选路径）。
+`1.1.71-rc2.2` 修了这个问题（4 个候选路径）。
 
 ## 修复：重跑安装脚本（新版会自动清掉旧版）
 
@@ -225,7 +225,7 @@ bash "$f"
 **新版会输出这一行**：
 
 ```
-==> 检测到已装 1.1.71，先移除再装 1.1.71-rc2.1
+==> 检测到已装 1.1.71，先移除再装 1.1.71-rc2.2
 ```
 
 ## 如果重跑后版本还是 1.1.71
@@ -260,7 +260,7 @@ bash "$f"
 node -p "require(require('os').homedir()+'/.dsh/profiles/web/node_modules/dsh-purge/package.json').version"
 ```
 
-**必须是 `1.1.71-rc2.1`**
+**必须是 `1.1.71-rc2.2`**
 
 ---
 
@@ -1225,7 +1225,7 @@ bash "$f"
 
 | 证据 | 命令 | 通过标准 |
 |---|---|---|
-| 1. 版本 | 见安装指南第 7 步第 1 小节 | `1.1.71-rc2.1` |
+| 1. 版本 | 见安装指南第 7 步第 1 小节 | `1.1.71-rc2.2` |
 | 2. 本次启动加载了插件 | 见安装指南第 7 步第 2 小节 | `at` 距现在 < 10 分钟 + `registered` + `broken: null` |
 | 3. 应用写进了宿主 | 见安装指南第 7 步第 3 小节 | 全新环境标记从 `0` 变 `> 0` |
 
